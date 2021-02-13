@@ -4,8 +4,8 @@
   "description": "Try webdriverio and shadow-dom support",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "test": "wdio wdio.conf.js"
+  }, 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/taherkheli/wdio-shadow.git"
