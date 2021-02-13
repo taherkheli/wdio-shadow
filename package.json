@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "wdio wdio.conf.js"
-  }, 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/taherkheli/wdio-shadow.git"
@@ -23,6 +23,7 @@
     "@wdio/mocha-framework": "^7.0.3",
     "@wdio/selenium-standalone-service": "^7.0.3",
     "@wdio/spec-reporter": "^7.0.3",
-    "@wdio/sync": "^7.0.3"
+    "@wdio/sync": "^7.0.3",
+    "query-selector-shadow-dom": "^1.0.0"
   }
 }
