@@ -1,0 +1,198 @@
+*************************************************************************************************************************
+Set up wdio v7 in sync mode with Selenium standalone service, Mocha, TypeScript  [14 Feb 2021]
+*************************************************************************************************************************
+> mkdir wdio-shadow && cd .\wdio-shadow
+initialize default project
+> npm init -y
+install wdio cli
+> npm i @wdio/cli --save-dev
+generate config
+> npx wdio config -y
+
+*************************************************************************************************************************
+This gave me error about a dependency 'node-gyp' needing Python
+pwsh(admin)
+> npm install --global --production windows-build-tools 
+and installed visual studio installer again with node dev + C++ desktop dev workloads
+and restarted
+and this time it worked
+*************************************************************************************************************************
+
+we have now installed a few packages the details of which can be seen in package.json
+You get some example test ready to run
+> npx wdio wdio.conf.js
+
+Chromedriver was auto installed via ChromeDriver Service
+Puppeteer (its something like Selenium) was also auto installed 
+Custom service and frameworks can be added to extend wdio capabilities
+
+*************************************************************************************************************************
+Enable Selenium stand alone service
+*************************************************************************************************************************
+
+Selenium stand alone service needs Java JDK 
+https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-selenium-standalone-service
+Before starting make sure you have JDK installed.
+
+Needed to make an account with oracle
+jdk-15.0.2_windows-x64_bin.exe
+
+we no longer need 'chromedriver' & 'wdio-chromedriver-service'
+$ npm uninstall --save-dev chromedriver
+$ npm uninstall --save-dev wdio-chromedriver-service
+
+install n configure selenium stand alone service
+$ npm install @wdio/selenium-standalone-service --save-dev
+ 
+verify package.json reflects these changes
+  	
+add 'selenium-standalone' to wdio config
+  services: ['selenium-standalone'], 
+
+run tests
+> npx wdio wdio.conf.js
+
+to make it simple,
+> npm test
+edit package.json
+  "scripts": {
+    "test": "wdio wdio.conf.js"
+  },  
+
+u can check the status of slenium stand alone service
+http://localhost:4444/wd/hub/static/resource/hub.html
+
+:) works with Selenium stand alone service
+
+*************************************************************************************************************************
+
+[Optional] couple of interesting boilerplates
+https://github.com/pako88/wdio-mocha-typescript/tree/master/src
+https://github.com/WarleyGabriel/demo-webdriverio-mocha
+
+*************************************************************************************************************************
+Enable Debugging:
+*************************************************************************************************************************
+vscode now has built-in debugging support for node
+
+vscode  stores user settings.json here:
+%APPDATA%\Code\User\
+
+workspace settings are in .vscode folder in ur proj under .vscode
+
+%APPDATA%\Code\User\settings.json
+add this setting 
+"debug.javascript.usePreview": true
+
+then u can launch via vscode UI
+Run Script: test
+
+builtin js debug plugin looks into package.json n here it cas see 'test' script
+so it gives u an option of [Run Script: test] .. now u can put break points in test files
+
+launch.json should end up lookin like this
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${file}"
+    }
+  ]
+}
+
+*************************************************************************************************************************
+Enable TS support:
+*************************************************************************************************************************
+
+install these pkgs
+> npm i typescript ts-node --save-dev
+
+now u can run tsc either like this
+$ ./node_modules/.bin/tsc -v
+or
+$ npx tsc -v
+
+generate tsconfig.json
+$ npx tsc --init
+
+edit tsconfig
+"compilerOptions": {
+  "target": "es2020",
+  "types": ["node", "webdriverio/sync"], 
+  },
+  "include": [
+        "./test/**/*.ts"
+  ]
+  *** webdriverio/sync comes with wdio v7. Previous version had @wdio/sync
+  *** note that if u have removed specs folder then update this to "./test/*.ts"
+  *** also u must have a .ts file or tsconfig will be red so change at least 1 .js test file½ to .ts
+  *** remember to change .js to .ts in wdio.conf 
+
+if you want to use assertion library "expect-webdriverio"
+local install mocha types
+1.
+> npm i @types/mocha --save-dev
+2.
+updates types in tsconfig
+"types": ["node", "webdriverio/sync", "@wdio/mocha-framework"],
+
+3.
+[since i had 'expect' in the samplejs test that i kept after adding ts. I needed to add support for it]
+expect assertions for mocha 
+https://www.npmjs.com/package/expect-webdriverio
+$ npm install expect --save-dev
+$ npm install expect-webdriverio --save-dev
+
+since i had 'require' due to js, I had to do an import to make 'expect' recognizable
+import {} from "expect-webdriverio";
+
+*************************************************************************************************************************
+Enable shadow-dom support via npm pkg
+*************************************************************************************************************************
+install the npm pkg "query-selector-shadow-dom"
+> npm i query-selector-shadow-dom --save-dev
+
+use the plugin functionality. Check details in commit history 
+
+*************************************************************************************************************************
+*************************************************************************************************************************
+
+
+
+
+continue here *****
+
+
+
+
+
+Older*****
+
+how to add add tslint
+https://www.darraghoriordan.com/2020/03/06/upgrade-tslint-deprecated-to-eslint/
+https://code.visualstudio.com/api/advanced-topics/tslint-eslint-migration
+
+how to add a logger
+
+*************************************************************************************************************************
+Redo first test with same structure:
+
+namespace in custom.ts was not being recognized in files unless I do a
+/// <reference path="../../../custom.ts" />
+
+Since namespace and modules should not be used together, I got rid of namespace altogether
+and am now just using modules
+import { Element } from "../../../custom"
+
+*************************************************************************************************************************
+*************************************************************************************************************************
+*************************************************************************************************************************
+*************************************************************************************************************************
+
+
