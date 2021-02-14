@@ -1,10 +1,5 @@
-import { locatorStrategy } from "query-selector-shadow-dom/plugins/webdriverio";
 
 describe("Chrome downloads", () => {
-  before(() => {
-    browser.addLocatorStrategy("shadow", locatorStrategy);
-  });
-
   it("shadow dom element can be located", () => {
     browser.url("chrome://downloads/");
     const moreAction = browser.custom$("shadow", "#moreActions");
