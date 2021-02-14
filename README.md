@@ -1,4 +1,4 @@
-![CI](https://github.com/taherkheli/wdio-shadow/workflows/CI/badge.svg?branch=develop)
+![CI](https://github.com/taherkheli/wdio-shadow/workflows/Node.js%20CI/badge.svg?branch=develop)
 
 ## wdio-shadow
 
