@@ -1,4 +1,6 @@
-# wdio-shadow
+![CI](https://github.com/taherkheli/wdio-shadow/workflows/Node.js%20CI/badge.svg?branch=develop)
+
+## wdio-shadow
 
 Set up webdriverio v.7 with selenium-stand-alone service, mocha, TypeScript, and nested-shadow-dom support
 
